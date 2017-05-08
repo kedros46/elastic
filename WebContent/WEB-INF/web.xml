@@ -12,13 +12,13 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>elastic</servlet-name>
-        <url-pattern>/welcome.jsp</url-pattern>
-        <url-pattern>/welcome.html</url-pattern>
+        <url-pattern>/indexing.jsp</url-pattern>
+        <url-pattern>/indexing.html</url-pattern>
         <url-pattern>*.html</url-pattern>
     </servlet-mapping>
   
   
-	<listener>
+	<!-- <listener>
 	  <listener-class>my.ServerListener</listener-class>
-	</listener>
+	</listener> -->
 </web-app>
