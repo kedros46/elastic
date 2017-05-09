@@ -1,8 +1,7 @@
 package be.duo.elastic.controller;
 
-import javax.servlet.ServletContextEvent;
-
-public class ServerListener implements javax.servlet.ServletContextListener{
+public class ServerListener{
+	/* implements javax.servlet.ServletContextListener{
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
@@ -17,5 +16,5 @@ public class ServerListener implements javax.servlet.ServletContextListener{
 		//if not > startup
 	}
 	
-	
+	*/
 }

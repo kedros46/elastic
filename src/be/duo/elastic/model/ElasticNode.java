@@ -17,6 +17,15 @@ import be.duo.elastic.config.ElasticParam;
 
 public class ElasticNode {
 
+//	public enum ClientType{
+//		ES,
+//		MONITORING,
+//		LICENSE,
+//		MACHINE_LEARNING,
+//		WATCHER,
+//		SECURITY;
+//	}
+	
 	Settings settings;
 	
 	public ElasticNode() {
@@ -26,14 +35,17 @@ public class ElasticNode {
 				.build();
 	}
 	
-	@SuppressWarnings("resource")
 	public TransportClient getEsClient() throws UnknownHostException{
 		return new PreBuiltTransportClient(settings).addTransportAddress(new InetSocketTransportAddress(InetAddress.getLocalHost(), 9300));
 	}
 	
-	@SuppressWarnings("resource")
 	public WatcherClient getWatcherClient() throws UnknownHostException{
 		TransportClient client = new PreBuiltXPackTransportClient(settings).addTransportAddress(new InetSocketTransportAddress(InetAddress.getLocalHost() , 9300));
 		return new XPackClient(client).watcher();
 	}
+	
+//	public SecurityClient getSecurityClient() throws UnknownHostException{
+//		TransportClient client = new PreBuiltXPackTransportClient(settings).addTransportAddress(new InetSocketTransportAddress(InetAddress.getLocalHost() , 9300));
+//		return new XPackClient(client).security();
+//	}
 }
