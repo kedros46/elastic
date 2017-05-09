@@ -12,8 +12,8 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>elastic</servlet-name>
-        <url-pattern>/indexing.jsp</url-pattern>
-        <url-pattern>/indexing.html</url-pattern>
+        <url-pattern>/*</url-pattern>
+        <url-pattern>*.jsp</url-pattern>
         <url-pattern>*.html</url-pattern>
     </servlet-mapping>
   
