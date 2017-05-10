@@ -20,6 +20,7 @@ import org.elasticsearch.xpack.watcher.client.WatcherClient;
 import org.elasticsearch.xpack.watcher.condition.ScriptCondition;
 import org.elasticsearch.xpack.watcher.input.search.SearchInput;
 import org.elasticsearch.xpack.watcher.support.search.WatcherSearchTemplateRequest;
+import org.elasticsearch.xpack.watcher.transport.actions.activate.ActivateWatchRequestBuilder;
 import org.elasticsearch.xpack.watcher.transport.actions.get.GetWatchResponse;
 import org.elasticsearch.xpack.watcher.transport.actions.put.PutWatchResponse;
 import org.elasticsearch.xpack.watcher.trigger.TriggerBuilders;
@@ -45,7 +46,7 @@ public class WatcherManager {
 		}
 	}
 	public void listWatchers(){
-		List<Watcher> watchers = new ArrayList<>();
+		List<EsWatcher> watchers = new ArrayList<>();
 		
 		//get watches from .wacthes index (not writable for except x-pack)
 		//also get watches from .watchers index (writable for devs)
@@ -53,22 +54,26 @@ public class WatcherManager {
 		SearchResponse rs = esClient.prepareSearch(".watches", "_watchers").get();
 		//TODO resolve response
 		for(SearchHit hit : rs.getHits()){
-			hit.getIndex();
-			hit.getType();
-			hit.getId();
 			Map<String, Object> source = hit.getSource();
-			source.get("trigger");
-			source.get("input");
-			source.get("condition");
-			source.get("throttle_period");
-			source.get("actions");
 			
-			watchers.add();
+
+			watchers.add(new Alerting()
+					.index(hit.getIndex())
+					.type(hit.getType())
+					.id(hit.getId())
+					.trigger(source.get("trigger"))
+					.input(source.get("input"))
+					.condition(source.get("condition"))
+					.throttlePeriod(source.get("throttle_period"))
+					.actions(source.get("actions")));
 		}
 	}
 	
 	public GetWatchResponse getWatchStatus(String id) throws UnknownHostException{
-		return watchClient.prepareGetWatch().get();
+		return watchClient.prepareGetWatch(id).get();
+	}
+	public ActivateWatchRequestBuilder setWatchState(String id, boolean state){
+		return watchClient.prepareActivateWatch(id, state);
 	}
 	
 	public PutWatchResponse addWatcher(String id, String schedule, Action action, SearchRequest request, String condition) throws UnknownHostException{
