@@ -28,6 +28,8 @@ import org.elasticsearch.xpack.watcher.trigger.schedule.Schedules;
 
 import be.duo.elastic.action.Action;
 import be.duo.elastic.model.ElasticNode;
+import be.duo.elastic.model.EsWatcher;
+import be.duo.elastic.model.EsWatcher.Type;
 
 public class WatcherManager {
 	//@Autowired 
@@ -50,22 +52,28 @@ public class WatcherManager {
 		
 		//get watches from .wacthes index (not writable for except x-pack)
 		//also get watches from .watchers index (writable for devs)
+		//type's => ../report/.. or ../alert/... ex. .watchers/alert/error_logs
 
-		SearchResponse rs = esClient.prepareSearch(".watches", "_watchers").get();
+		SearchResponse rs = esClient.prepareSearch(".watches", ".watchers").get();
 		//TODO resolve response
 		for(SearchHit hit : rs.getHits()){
 			Map<String, Object> source = hit.getSource();
 			
-
-			watchers.add(new Alerting()
+			EsWatcher watcher = new EsWatcher()
 					.index(hit.getIndex())
-					.type(hit.getType())
+					.type(EsWatcher.toType(hit.getType()))
 					.id(hit.getId())
-					.trigger(source.get("trigger"))
-					.input(source.get("input"))
-					.condition(source.get("condition"))
-					.throttlePeriod(source.get("throttle_period"))
-					.actions(source.get("actions")));
+					.trigger(source.get("trigger").toString())
+					.throttlePeriod(source.get("throttle_period").toString())
+					.actions(EsWatcher.toActions(source.get("actions")));
+					
+					if(watcher.getType() == Type.ALERTING){
+						watcher.input(source.get("input").toString())
+							   .condition(source.get("condition").toString());
+					}
+					
+			watchers.add(watcher);
+					
 		}
 	}
 	
