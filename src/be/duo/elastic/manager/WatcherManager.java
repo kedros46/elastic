@@ -38,16 +38,15 @@ public class WatcherManager {
 	WatcherClient watchClient;
 	
 	public WatcherManager() {
-		try {
-			ElasticNode node = new ElasticNode(); 
+		try { 
+			ElasticNode node = new ElasticNode();
 			esClient = node.getEsClient();
-			watchClient = node.getWatcherClient();
-			
+			watchClient = node.getWatcherClient();	
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
 	}
-	public void listWatchers(){
+	public List<EsWatcher> listWatchers(){
 		List<EsWatcher> watchers = new ArrayList<>();
 		
 		//get watches from .wacthes index (not writable for except x-pack)
@@ -75,6 +74,7 @@ public class WatcherManager {
 			watchers.add(watcher);
 					
 		}
+		return watchers;
 	}
 	
 	public GetWatchResponse getWatchStatus(String id) throws UnknownHostException{
@@ -127,5 +127,10 @@ public class WatcherManager {
 	private SearchInput makeSearchInput(SearchRequest request){
 		return new SearchInput(new WatcherSearchTemplateRequest(request.indices(), null, SearchType.DEFAULT, 
 				WatcherSearchTemplateRequest.DEFAULT_INDICES_OPTIONS, new BytesArray(request.source().toString())), null, null, null);
+	}
+	
+	public void close(){
+		esClient.close();
+		//watchClient.close();
 	}
 }
