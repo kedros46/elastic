@@ -53,7 +53,7 @@ public class WatcherManager {
 		//also get watches from .watchers index (writable for devs)
 		//type's => ../report/.. or ../alert/... ex. .watchers/alert/error_logs
 
-		SearchResponse rs = esClient.prepareSearch(".watches", ".watchers").get();
+		SearchResponse rs = esClient.prepareSearch(".watches", ".watcher").get();
 		//TODO resolve response
 		for(SearchHit hit : rs.getHits()){
 			Map<String, Object> source = hit.getSource();
