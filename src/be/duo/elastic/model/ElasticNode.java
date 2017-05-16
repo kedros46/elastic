@@ -32,15 +32,16 @@ public class ElasticNode {
 		//TODO parameterize settings
 		settings = Settings.builder()
 				.put(ElasticParam.CLUSTERNAME.name, "duodev")
+				
 				.build();
 	}
 	
 	public TransportClient getEsClient() throws UnknownHostException{
-		return new PreBuiltTransportClient(settings).addTransportAddress(new InetSocketTransportAddress(InetAddress.getLocalHost(), 9300));
+		return new PreBuiltTransportClient(settings).addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("localhost"), 9200));
 	}
 	
 	public WatcherClient getWatcherClient() throws UnknownHostException{
-		TransportClient client = new PreBuiltXPackTransportClient(settings).addTransportAddress(new InetSocketTransportAddress(InetAddress.getLocalHost() , 9300));
+		TransportClient client = new PreBuiltXPackTransportClient(settings).addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("localhost"), 9200));
 		return new XPackClient(client).watcher();
 	}
 	
