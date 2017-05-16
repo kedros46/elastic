@@ -37,11 +37,11 @@ public class ElasticNode {
 	}
 	
 	public TransportClient getEsClient() throws UnknownHostException{
-		return new PreBuiltTransportClient(settings).addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("localhost"), 9200));
+		return new PreBuiltTransportClient(settings).addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("localhost"), 9300));
 	}
 	
 	public WatcherClient getWatcherClient() throws UnknownHostException{
-		TransportClient client = new PreBuiltXPackTransportClient(settings).addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("localhost"), 9200));
+		TransportClient client = new PreBuiltXPackTransportClient(settings).addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("localhost"), 9300));
 		return new XPackClient(client).watcher();
 	}
 	
